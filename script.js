@@ -291,7 +291,7 @@ function filterJobRejectionEmails() {
 
     // 3. Dynamically Generate Table if Actionable Items Exist
     if (actionableEmails.length > 0) {
-      htmlBody += `<h3>&#128197; Action Items & Focus Areas</h3>`;
+      htmlBody += `<h3>&#128197; Action Items</h3>`;
       htmlBody += `<table>`;
       htmlBody += `  <thead>`;
       htmlBody += `    <tr>`;
@@ -332,7 +332,7 @@ function filterJobRejectionEmails() {
       htmlBody += `</table>`;
     } else {
       htmlBody +=
-        `<p><em>No positive leads or review items ` +
+        `<p><em>No positive leads ` +
         `detected in this run.</em></p>`;
     }
 
