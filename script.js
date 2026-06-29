@@ -29,7 +29,8 @@ function filterJobRejectionEmails() {
     "LinkedIn Job Alerts",
     "LinkedIn Job Recommendations",
   ];
-  // 6. Status labels used for classification and reporting
+
+  // Status labels used for classification and reporting
   const STATUS_UNKNOWN = "Unknown";
   const STATUS_REJECTED = "Rejected";
   const STATUS_NEXT_STEP = "Next Step / Invitation";
