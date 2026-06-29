@@ -29,6 +29,11 @@ function filterJobRejectionEmails() {
     "LinkedIn Job Alerts",
     "LinkedIn Job Recommendations",
   ];
+  // 6. Status labels used for classification and reporting
+  const STATUS_UNKNOWN = "Unknown";
+  const STATUS_REJECTED = "Rejected";
+  const STATUS_NEXT_STEP = "Next Step / Invitation";
+  const STATUS_NEEDS_REVIEW = "Needs Human Review";
 
   // ==========================================
   // 🔍 STAGE 1: GMAIL PRE-FILTERING
@@ -141,26 +146,26 @@ function filterJobRejectionEmails() {
         subject: latestMessage.getSubject(),
         from: latestMessage.getFrom(),
         link: threads[i].getPermalink(),
-        status: "Unknown"
+        status: STATUS_UNKNOWN
       };
 
       if (aiDecision === "REJECTION") {
         threads[i].markRead();
         threads[i].moveToArchive();
-        emailMetadata.status = "Rejected";
+        emailMetadata.status = STATUS_REJECTED;
         processedEmailsLog.push(emailMetadata);
       } else if (aiDecision === "NEXT_STEP") {
         threads[i].addLabel(nextStepFolder);
         threads[i].moveToArchive();
         nextStepsFound++;
-        emailMetadata.status = "Next Step / Invitation";
+        emailMetadata.status = STATUS_NEXT_STEP;
         processedEmailsLog.push(emailMetadata);
       } else {
         // Fallback / UNKNOWN -> Needs manual human review
         threads[i].addLabel(reviewFolder);
         threads[i].moveToArchive();
         emailsRetained++;
-        emailMetadata.status = "Needs Human Review";
+        emailMetadata.status = STATUS_NEEDS_REVIEW;
         processedEmailsLog.push(emailMetadata);
       }
     } catch (e) {
@@ -185,13 +190,13 @@ function filterJobRejectionEmails() {
 
     // Separate rejections for the CSV file
     const rejectedEmails = processedEmailsLog.filter(
-      (e) => e.status === "Rejected"
+      (e) => e.status === STATUS_REJECTED
     );
 
     // Filter out actionable emails to build our inline dashboard
     // table
     const actionableEmails = processedEmailsLog.filter(
-      (e) => e.status === "Next Step / Invitation"
+      (e) => e.status === STATUS_NEXT_STEP
     );
 
     // 1. Build the Rejection-Only CSV
@@ -298,7 +303,7 @@ function filterJobRejectionEmails() {
       htmlBody += `  <tbody>`;
 
       actionableEmails.forEach((email) => {
-        const isNextStep = email.status === "Next Step / Invitation";
+        const isNextStep = email.status === STATUS_NEXT_STEP;
         const badgeClass = isNextStep ? "badge-next" : "badge-review";
         const statusLabel = isNextStep ? "Next Step" : "Review";
 
