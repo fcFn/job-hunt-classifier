@@ -191,7 +191,7 @@ function filterJobRejectionEmails() {
     // Filter out actionable emails to build our inline dashboard
     // table
     const actionableEmails = processedEmailsLog.filter(
-      (e) => e.status !== "Rejected"
+      (e) => e.status === "Next Step / Invitation"
     );
 
     // 1. Build the Rejection-Only CSV
